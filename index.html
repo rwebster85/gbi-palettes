@@ -106,15 +106,16 @@
 <p class="sec">--palette argument</p>
 <p style="font-size:13px;color:#666;margin:0 0 4px;">Add this argument to your Game Boy Interface .cli file</p>
 <textarea id="out" rows="1" spellcheck="false"></textarea>
-<p class="hint">Edit directly to reverse-convert XRGB codes back to hex — paste a --palette= string or just the #XXXX,#XXXX,#XXXX,#XXXX codes.</p>
+<p class="hint">Edit directly to reverse-convert XRGB codes back to hex — paste a --palette= string or just the #XXXX,#XXXX,#XXXX,#XXXX codes. Note: converting back to hex may not be exact due to the lossy nature of the R5G5B5 conversion.</p>
 <div class="copy-row">
   <span id="copied">Copied!</span>
-  <button onclick="shareUrl()">Share URL</button>
+  <button onclick="shareUrl('hex')">Share (Hex)</button>
+  <button onclick="shareUrl('xrgb')">Share (XRGB)</button>
   <button onclick="copyIt()">Copy</button>
 </div>
 
 <footer>
-  Made for use with <a href="https://www.gc-forever.com/wiki/index.php?title=Game_Boy_Interface" target="_blank">Game Boy Interface</a> by Extrems. Palette values ordered darkest to lightest.
+  Made for use with <a href="https://www.gc-forever.com/wiki/index.php?title=Game_Boy_Interface" target="_blank">Game Boy Interface</a> by Extrems.
 </footer>
 
 <script>
@@ -348,9 +349,14 @@ function applyPreset() {
   render();
 }
 
-function shareUrl() {
-  var codes = cols.map(function(hex) { return conv(hex).xrgb; });
-  var hash = '#palette=' + codes.join(',');
+function shareUrl(format) {
+  var hash;
+  if (format === 'xrgb') {
+    var codes = cols.map(function(hex) { return conv(hex).xrgb; });
+    hash = '#palette=' + codes.join(',');
+  } else {
+    hash = '#hex=' + cols.map(function(h) { return h.replace('#',''); }).join(',');
+  }
   var url = window.location.href.split('#')[0] + hash;
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(url).catch(function() { fallbackCopy(url); });
@@ -364,10 +370,14 @@ function shareUrl() {
 
 function loadFromHash() {
   var hash = window.location.hash;
-  var match = hash.match(/[#&]palette=([0-9a-fA-F]{4}(?:,[0-9a-fA-F]{4}){3})/);
-  if (match) {
-    var parts = match[1].split(',');
-    cols = parts.map(function(p) { return revconv(p); });
+  var xrgbMatch = hash.match(/[#&]palette=([0-9a-fA-F]{4}(?:,[0-9a-fA-F]{4}){3})/);
+  if (xrgbMatch) {
+    cols = xrgbMatch[1].split(',').map(function(p) { return revconv(p); });
+    return true;
+  }
+  var hexMatch = hash.match(/[#&]hex=([0-9a-fA-F]{6}(?:,[0-9a-fA-F]{6}){3})/);
+  if (hexMatch) {
+    cols = hexMatch[1].split(',').map(function(h) { return '#' + h; });
     return true;
   }
   return false;
