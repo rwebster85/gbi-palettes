@@ -81,6 +81,10 @@
 <div id="preview-wrap">
   <canvas id="preview"></canvas>
 </div>
+<div class="img-select" style="margin-top:-8px;margin-bottom:20px;">
+  <label><input type="radio" name="previewmode" value="hex" checked onchange="setPreviewMode(this.value)"> Preview: Hex colours</label>
+  <label><input type="radio" name="previewmode" value="xrgb" onchange="setPreviewMode(this.value)"> Preview: XRGB colours</label>
+</div>
 
 <p class="sec">Colours</p>
 <div class="pickers" id="pickers"></div>
@@ -162,6 +166,13 @@ function hexToRgb(hex) {
   return [parseInt(hex.slice(0,2),16), parseInt(hex.slice(2,4),16), parseInt(hex.slice(4,6),16)];
 }
 
+var previewMode = 'hex';
+
+function setPreviewMode(mode) {
+  previewMode = mode;
+  drawPreview();
+}
+
 function drawPreview() {
   if (!pixelData) return;
   var canvas = document.getElementById('preview');
@@ -170,7 +181,14 @@ function drawPreview() {
   canvas.height = h;
   var ctx = canvas.getContext('2d');
   ctx.imageSmoothingEnabled = false;
-  var palette = cols.map(hexToRgb);
+  var palette;
+  if (previewMode === 'xrgb') {
+    palette = cols.map(function(hex) {
+      return hexToRgb(revconv(conv(hex).xrgb));
+    });
+  } else {
+    palette = cols.map(hexToRgb);
+  }
   var offscreen = document.createElement('canvas');
   offscreen.width = IMG_W; offscreen.height = IMG_H;
   var octx = offscreen.getContext('2d');
