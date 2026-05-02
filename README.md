@@ -41,13 +41,14 @@ This tool lets you pick colours using a standard hex colour picker or by enterin
 ### Hardware
 | Name | Description |
 |---|---|
-| DMG (NSO) | Original Game Boy, as used by Nintendo Switch Online |
+| DMG | Original Game Boy real hardware colours |
 | GB Pocket | Game Boy Pocket |
 | GB Light | Game Boy Light |
 
 ### Custom
 | Name | Description |
 |---|---|
+| DMG (NSO) | DMG palette as used by Nintendo Switch Online |
 | DMG (Retroarch) | DMG palette as used by Retroarch |
 | DMG (BGB) | DMG palette as used by the BGB emulator |
 | GB Pocket (Retroarch) | GB Pocket palette as used by Retroarch |
@@ -78,7 +79,6 @@ This tool lets you pick colours using a standard hex colour picker or by enterin
 2. Select a preset palette or enter your own hex colours
 3. Copy the generated `--palette=` argument
 4. Add it to your GBI `.cli` file
-5. Hold `left + B` when your Game Boy game is booting to ensure proper application of the palette
 
 ---
 
