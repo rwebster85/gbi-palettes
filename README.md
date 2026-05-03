@@ -49,6 +49,7 @@ This tool lets you pick colours using a standard hex colour picker or by enterin
 | Name | Description |
 |---|---|
 | DMG (NSO) | DMG palette as used by Nintendo Switch Online |
+| DMG (HW + NSO) | Real hardware DMG colours with NSO layer 2 for improved contrast |
 | DMG (Retroarch) | DMG palette as used by Retroarch |
 | DMG (BGB) | DMG palette as used by the BGB emulator |
 | GB Pocket (Retroarch) | GB Pocket palette as used by Retroarch |
