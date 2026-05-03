@@ -339,10 +339,16 @@ function render(skipOut) {
   }
 
   var sel = document.getElementById('preset');
-  var currentVal = cols.join(',');
+  var currentXrgb = cols.map(function(hex) { return conv(hex).xrgb; }).join(',');
   var matched = false;
   for (var o = 0; o < sel.options.length; o++) {
-    if (sel.options[o].value === currentVal) { matched = true; break; }
+    if (!sel.options[o].value) continue;
+    var optXrgb = sel.options[o].value.split(',').map(function(hex) { return conv(hex.trim()).xrgb; }).join(',');
+    if (optXrgb === currentXrgb) {
+      sel.value = sel.options[o].value;
+      matched = true;
+      break;
+    }
   }
   if (!matched) sel.value = '';
 
